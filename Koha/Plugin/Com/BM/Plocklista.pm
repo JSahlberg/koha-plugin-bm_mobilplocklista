@@ -17,14 +17,14 @@ use utf8;
 
 use warnings;
 
-our $VERSION = "1.33b";
+our $VERSION = "1.4";
 
 
 our $metadata = {
     name            => 'Enkel plocklista',
     author          => 'Johan Sahlberg',
     date_authored   => '2023-08-08',
-    date_updated    => "2026-06-23",
+    date_updated    => "2026-11-11",
     minimum_version => 22.05,
     maximum_version => '',
     version         => $VERSION,
@@ -86,7 +86,7 @@ sub intranet_js {
                 button.addEventListener("click", function (ev) {
                     ev.preventDefault();
                     var bibl = $('.logged-in-branch-code:first').text();
-                    window.open("/cgi-bin/koha/plugins/run.pl?class=" + encodeURIComponent("Koha::Plugin::Com::BM::Plocklista") + "&method=getPlocklista&branchlimit=" + bibl + "&run_report=1");
+                    window.open("/cgi-bin/koha/plugins/run.pl?class=" + encodeURIComponent("Koha::Plugin::Com::BM::Plocklista") + "&method=tool&subroutine=getPlocklista&branchlimit=" + bibl + "&run_report=1");
                 });
                 const tlm = document.querySelector('.results');
                 if (tlm) {
@@ -217,6 +217,25 @@ sub intranet_js {
     })();
 </script>
 EOF
+}
+
+
+sub tool {
+    my ( $self, $args ) = @_;
+
+    my $query = new CGI;
+
+    my $result;
+
+    my $sub = $query->param('subroutine');
+
+    if ($sub eq 'flstatus') {
+        $result = getPlocklista($self, $query);    
+    }
+    else {
+        $result = getPlocklista($self, $query);
+    }
+
 }
     
 
